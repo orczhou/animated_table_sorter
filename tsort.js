@@ -82,9 +82,16 @@ Array - Specifc table
 			/* GET TABLE DATA */
 			function getTableData() {
 				
+                var tlength = $(table).find('tr').length;
 				/* PUT TABLE DATA INTO AN OBJECT ARRAY */
 				$(table).find('tr').each(function(index) {
-					if (index > 0) $(this).addClass('tsort_id-' + (index - 1)); // Add a class to each tr that corresponds with the object id (tsortid-0)
+                   if (index > 0) $(this).removeClass(function(){
+                        var allclasses = "";
+                        for(var i=0; i<= tlength ;i++){
+                            allclasses = allclasses+"tsort_id-"+i+" ";
+                        }
+                        return allclasses;
+                    }).addClass('tsort_id-' + (index - 1)); // Add a class to each tr that corresponds with the object id (tsortid-0)
 					$(this).find('td').each(function (td_index) {
 						if ($(this).is(":first-child")) {
 							table_data.push(new Object());
@@ -195,9 +202,20 @@ Array - Specifc table
 				if (table_data.length == 0) { // Get the table data if we haven't already
 					getTableData();
 				}
+                if(typeof rebuild != 'undefined' && rebuild){
+                    if(rebuild){
+                       table_data = new Array();  // Original table data
+                        table_data.length = 0;
+                        sorted_table_data = new Array(); // To contain sorted tables
+                        sorted_table_data.length = 0;
+                       sorting_history = new Array();
+                        sorting_history.length = 0;
+                       getTableData();
+                    }
+                }
 				
 				if (!sorted_table_data[th_index_selected]) {	// If we haven't sorted this column yet
-						sorted_table_data[th_index_selected] = table_data.concat(); // Make a copy of the original table data
+				    sorted_table_data[th_index_selected] = table_data.concat(); // Make a copy of the original table data
 					if (sorting_criteria[th_index_selected] == 'numeric') {		// Sort numeric
 						sorted_table_data[th_index_selected].sort(function(a,b) {
 							return a.td[th_index_selected] - b.td[th_index_selected];
