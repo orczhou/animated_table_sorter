@@ -202,8 +202,8 @@ Array - Specifc table
 				if (table_data.length == 0) { // Get the table data if we haven't already
 					getTableData();
 				}
-                if(typeof rebuild != 'undefined' && rebuild){
-                    if(rebuild){
+                if(typeof __tsort_rebuild != 'undefined' && __tsort_rebuild){
+                    if(__tsort_rebuild){
                        table_data = new Array();  // Original table data
                         table_data.length = 0;
                         sorted_table_data = new Array(); // To contain sorted tables
@@ -275,11 +275,18 @@ Array - Specifc table
 			
 			// This function receives the new sorted table data array and displays it
 			function display_table(data, direction) {
-				if (direction == 'ascending') {
-					var data = data.concat(); // .concat() fixes function scope issues with references by saving a copy of it (function within function loading old data)
-				} else {
-					var data = data.concat().reverse();
-				}
+                if(typeof __tsort_direction != 'undefined'){
+                	if (__tsort_direction == 'ascending') {
+                    	var data = data.concat(); // .concat() fixes function scope issues with references by saving a copy of it (function within function loading old data)
+                	} else {
+                    	var data = data.concat().reverse();
+                	}
+                }
+                else if (direction == 'ascending') {
+                    var data = data.concat(); // .concat() fixes function scope issues with references by saving a copy of it (function within function loading old data)
+                } else {
+                    var data = data.concat().reverse();
+                }
 				
 				vertical_offset = $(table).find('tr').height(); // Start at header height
 				
